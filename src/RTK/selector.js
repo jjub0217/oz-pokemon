@@ -17,6 +17,8 @@ export const pokemon = (id) =>
     // state 에서 pokemon 상태중에서 일부를 어떻게 가져올건지 함수로 작성해서 전달
     (state) => state.pokemon.list,
     (listes) => {
+      console.log(listes);
+
       // console.log(listes.find((el) => el.id === id));
 
       const selectPokemon = listes.find((el) => el.id === id);
@@ -24,3 +26,31 @@ export const pokemon = (id) =>
       return selectPokemon;
     }
   );
+
+export const searchPokemon = (params) =>
+  createSelector(
+    // 내가 어떤 상태에서 일부만 가져올건지 작성
+
+    // state 에서 pokemon 상태중에서 일부를 어떻게 가져올건지 함수로 작성해서 전달
+    (state) => state.pokemon.list,
+    (listes) => {
+      // console.log(listes.find((el) => el.id === id));
+      // console.log(params);
+
+      const result = listes.filter((el) => el.name.match(params));
+      return result;
+    }
+  );
+
+export const selectIsFavoriteById = (id) =>
+  createSelector(
+    (state) => state.favorite.list,
+    (list) => list.includes(id)
+  );
+
+export const selectIsFavorites = createSelector(
+  [(state) => state.pokemon.list, (state) => state.favorite.list],
+  (pokemon, favorite) => {
+    return pokemon.filter((el) => favorite.includes(el.id));
+  }
+);

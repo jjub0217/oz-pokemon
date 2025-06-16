@@ -1,12 +1,18 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 import { fetchPokemonList } from "./RTK/thunk";
-import Detail from "./pages/Detail";
-import Favorite from "./pages/Favorite";
-import Main from "./pages/Main";
-import Search from "./pages/Search";
+// import Detail from "./pages/Detail";
+// import Favorite from "./pages/Favorite";
+// import Main from "./pages/Main";
+// import Search from "./pages/Search";
+
+const Detail = lazy(() => import("./pages/Detail"));
+const Favorite = lazy(() => import("./pages/Favorite"));
+const Main = lazy(() => import("./pages/Main"));
+const Search = lazy(() => import("./pages/Search"));
+
 function App() {
   // 정보를 어떻게 쏙쏙 빼와서 우리에게 필요한 데이터로 가공을 할지부터 데이터 처리하면서 확인
 
@@ -78,6 +84,9 @@ function App() {
   //   getData();
   // }, []);
 
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
+
   useEffect(() => {
     // dispatch(pokemonSlice.actions.setIsLoading(true));
     // 자동으로 pending/fulfilled/rejected 처리됨
@@ -92,22 +101,48 @@ function App() {
     //   dispatch(pokemonSlice.actions.setIsLoading(false));
     // });
   }, [dispatch]);
+
+  const handleSearch = (e) => {
+    setInputValue(e.target.value);
+    navigate(`/search?pokemon=${e.target.value}`);
+  };
   return (
     <>
-      <h1 className="text-[40px] text-center">포켓몬 도감</h1>
-      <nav className="flex gap-[10px] justify-center">
+      <h1
+        className="text-[40px] text-center border-t-[50px] border-t-[red]
+      bg-[#000] text-[#fff]"
+      >
+        포켓몬 도감
+      </h1>
+      <nav className="py-[10px] border-b-[3px] border-b-black flex gap-[20px] justify-center">
         <Link to={`/`}>메인</Link>
-        <Link to={`/detail/1`}>상세정보</Link>
-        <Link to={`/search`}>검색</Link>
         <Link to={`/favorite`}>찜목록</Link>
+        <div>
+          <label htmlFor="search" className="sr-only">
+            검색
+          </label>
+          <input
+            id="search"
+            type="text"
+            className="w-[120px] border-b border-[gray] px-2"
+            onChange={handleSearch}
+            value={inputValue}
+          />
+          <span>🔎</span>
+        </div>
       </nav>
-      <main className="flex justify-center flex-wrap gap-[20px] pt-[20px]">
-        <Routes>
-          <Route path={`/`} element={<Main />} />
-          <Route path={`/detail/:id`} element={<Detail />} />
-          <Route path={`/search`} element={<Search />} />
-          <Route path={`/favorite`} element={<Favorite />} />
-        </Routes>
+      <main
+        className="flex justify-center flex-wrap gap-[20px] pt-[20px]
+      bg-[gray] pb-[20px]"
+      >
+        <Suspense fallback={<p>로딩 중...</p>}>
+          <Routes>
+            <Route path={`/`} element={<Main />} />
+            <Route path={`/detail/:id`} element={<Detail />} />
+            <Route path={`/search`} element={<Search />} />
+            <Route path={`/favorite`} element={<Favorite />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* {isLoading ? (
