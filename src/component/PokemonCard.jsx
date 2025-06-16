@@ -1,5 +1,7 @@
+import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { FavoriteButton } from "./FavoriteButton";
 
 const CardContainer = styled.section`
   width: 150px;
@@ -12,25 +14,41 @@ const CardContainer = styled.section`
   padding-bottom: 10px;
   border-radius: 10px;
   cursor: pointer;
-  /* border-bottom: 5px solid black;
-  border-right: 5px solid black; */
+  border-bottom: 5px solid black;
+  border-right: 5px solid black;
 
   img {
     width: 120px;
   }
 `;
 
-export const PokemonCard = ({ pokemon }) => {
+export const PokemonCard = memo(({ pokemon }) => {
+  console.log("card", pokemon.id);
+
+  const [loaded, setLoaded] = useState(true);
   const navigate = useNavigate();
-  console.log(pokemon.id);
 
   const handleToDetail = () => {
     navigate(`/detail/${pokemon.id}`);
   };
+
   return (
     <CardContainer onClick={handleToDetail}>
-      <img src={pokemon.front} alt={pokemon.name} className="w-[120px]" />
-      <div>{pokemon.name}</div>
+      {/* img 태그에 onLoad 라는 이미지가 다 로드 되면 그때 이미지를 화면에 표시*/}
+      {loaded ? (
+        <p className="w-[120px] h-[120px] leading-[120px] text-center">
+          로딩 중...
+        </p>
+      ) : null}
+      <img
+        src={pokemon.front}
+        alt={pokemon.name}
+        className="w-[120px]"
+        onLoad={() => setLoaded(false)}
+        style={{ display: loaded ? "none" : "block" }}
+      />
+      <h2>{pokemon.name}</h2>
+      <FavoriteButton id={pokemon.id} />
     </CardContainer>
   );
-};
+});
