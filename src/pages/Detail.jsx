@@ -8,12 +8,8 @@ import FlipCard from "../component/FlipCard";
 
 export default function Detail() {
   const { id } = useParams();
-  console.log(id);
   const pokemonList = useSelector((state) => state.pokemon.list);
   const isLoading = useSelector((state) => state.pokemon.loading);
-
-  // id 가, list 로 받아오는 거에서 같은지 걸러야 하는데, 좀 비효율적이다.
-  // const { list: pokemonList } = useSelector((state) => state.pokemon);
   const dispatch = useDispatch();
   const selectedPokemon = useSelector(pokemon(Number(id)));
 
@@ -38,11 +34,6 @@ export default function Detail() {
         {selectedPokemon.description}
       </p>
       <FlipCard front={selectedPokemon.front} back={selectedPokemon.back} />
-      {/* <img
-        src={selectedPokemon.front}
-        alt={selectedPokemon.name}
-        className="w-[200px]"
-      /> */}
     </article>
   );
 }

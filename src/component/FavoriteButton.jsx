@@ -5,9 +5,6 @@ import { favoriteSlice } from "../RTK/slice";
 
 export const FavoriteButton = ({ id }) => {
   const dispatch = useDispatch();
-
-  // 내가 누른 항목의 id 가 favoriteList 이라는 상태 배열안에 이미 포함되어있다면
-  // true, 없다면 false
   const isFavorite = useSelector(selectIsFavoriteById(Number(id)));
 
   const handleFavorite = useCallback(

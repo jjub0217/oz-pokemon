@@ -34,7 +34,6 @@ export const PokemonCard = memo(({ pokemon }) => {
 
   return (
     <CardContainer onClick={handleToDetail}>
-      {/* img 태그에 onLoad 라는 이미지가 다 로드 되면 그때 이미지를 화면에 표시*/}
       {loaded ? (
         <p className="w-[120px] h-[120px] leading-[120px] text-center">
           로딩 중...

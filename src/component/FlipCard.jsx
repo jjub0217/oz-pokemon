@@ -31,7 +31,6 @@ export default function FlipCard({ front, back }) {
   };
   return (
     <>
-      {/* props 로 boolean 값을 직통으로 내려주면 안되기 때문에... */}
       <FlipImageContainer flipped={flipped ? "flip" : ""}>
         <FrontImage src={front} />
         <BackImage src={back} />
